@@ -6,13 +6,13 @@
   <title>Omari Loans</title>
   <style>
     :root {
-      --primary-green: #1B4D3E;
-      --light-green: #E8F0EC;
-      --header-green: #1B4D3E;
+      --primary-green: #00B050;
+      --light-green: #E6F7ED;
+      --header-green: #00B050;
       --accent-gold: #D4A373;
       --text-dark: #1F2937;
       --text-muted: #6B7280;
-      --card-bg: #F9F8F6;
+      --card-bg: #F9FDFB;
     }
 
     * {
@@ -23,7 +23,7 @@
     }
 
     body {
-      background-color: #D6DDD9;
+      background-color: #D1F2DF;
       display: flex;
       justify-content: center;
       min-height: 100vh;
@@ -32,7 +32,7 @@
     .app-container {
       width: 100%;
       max-width: 420px;
-      background-color: #EFECE6;
+      background-color: #EBF9F0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -40,7 +40,7 @@
     }
 
     .top-bar {
-      background: linear-gradient(180deg, #1B4D3E 0%, #256753 100%);
+      background: linear-gradient(180deg, #00C853 0%, #00963F 100%);
       color: #FFFFFF;
       text-align: center;
       padding: 18px 10px;
@@ -54,7 +54,7 @@
       margin: 20px 16px 0 16px;
       border-radius: 24px;
       padding: 24px 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      box-shadow: 0 4px 12px rgba(0,176,80,0.08);
     }
 
     .hero-title {
@@ -77,7 +77,7 @@
       background-color: var(--card-bg);
       border-radius: 16px;
       padding: 20px 16px;
-      border: 1px solid #E5E7EB;
+      border: 1px solid #D4F1E0;
       margin-bottom: 20px;
     }
 
@@ -106,7 +106,7 @@
       appearance: none;
       height: 8px;
       border-radius: 4px;
-      background: #C4D7CC;
+      background: #B4E8C9;
       outline: none;
       margin-bottom: 6px;
     }
@@ -178,12 +178,12 @@
       font-weight: 700;
       letter-spacing: 0.5px;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(27, 77, 62, 0.25);
+      box-shadow: 0 4px 8px rgba(0, 176, 80, 0.3);
       transition: background-color 0.2s;
     }
 
     .apply-btn:active {
-      background-color: #12352B;
+      background-color: #008F41;
     }
 
     .features-list {
@@ -199,7 +199,7 @@
       padding: 16px 20px;
       display: flex;
       align-items: center;
-      border: 1px solid #E5E7EB;
+      border: 1px solid #D4F1E0;
     }
 
     .feature-icon {
@@ -237,12 +237,12 @@
       <div class="calculator-box">
         <div class="group-header">
           <span class="group-label">Loan Amount</span>
-          <span class="group-value" id="amountDisplay">50,000 ZWG</span>
+          <span class="group-value" id="amountDisplay">$5,000</span>
         </div>
-        <input type="range" id="amountSlider" class="range-slider" min="1000" max="500000" step="1000" value="50000">
+        <input type="range" id="amountSlider" class="range-slider" min="100" max="50000" step="500" value="5000">
         <div class="range-limits">
-          <span>1,000 ZWG</span>
-          <span>500,000 ZWG</span>
+          <span>$100</span>
+          <span>$50,000</span>
         </div>
 
         <div class="group-header">
@@ -257,7 +257,7 @@
 
         <div class="result-box">
           <div class="result-label">Monthly<br>Payment</div>
-          <div class="result-value" id="paymentDisplay">4,584<br>ZWG</div>
+          <div class="result-value" id="paymentDisplay">$458</div>
         </div>
       </div>
 
@@ -306,14 +306,14 @@
       const months = parseInt(termSlider.value);
 
       // Display formatting
-      amountDisplay.textContent = `${principal.toLocaleString()} ZWG`;
+      amountDisplay.textContent = `$${principal.toLocaleString()}`;
       termDisplay.textContent = `${months} months`;
 
       // Monthly interest rate calculation (amortized formula)
       const monthlyRate = ANNUAL_INTEREST_RATE / 12;
       calculatedMonthlyPayment = (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
 
-      paymentDisplay.innerHTML = `${Math.round(calculatedMonthlyPayment).toLocaleString()}<br>ZWG`;
+      paymentDisplay.innerHTML = `$${Math.round(calculatedMonthlyPayment).toLocaleString()}`;
     }
 
     amountSlider.addEventListener('input', calculatePayment);
